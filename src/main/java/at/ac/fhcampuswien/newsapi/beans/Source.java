@@ -17,7 +17,7 @@ public class Source {
     @JsonProperty("name")
     private String name;
     @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+    private Map<String, Object> additionalProperties = new HashMap<>();
 
     /**
      * No args constructor for use in serialization

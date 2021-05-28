@@ -1,7 +1,7 @@
 package at.ac.fhcampuswien.newsapi;
 
 import at.ac.fhcampuswien.newsapi.beans.Article;
-import at.ac.fhcampuswien.newsapi.beans.NewsReponse;
+import at.ac.fhcampuswien.newsapi.beans.NewsResponse;
 import at.ac.fhcampuswien.newsapi.enums.Category;
 import at.ac.fhcampuswien.newsapi.enums.Country;
 import at.ac.fhcampuswien.newsapi.enums.Endpoint;
@@ -22,7 +22,7 @@ public class NewsAPIExample {
                 .setSourceCategory(Category.health) // example of how to use enums
                 .createNewsApi();
 
-            NewsReponse newsResponse = newsApi.getNews();
+            NewsResponse newsResponse = newsApi.getNews();
             if(newsResponse != null){
                 List<Article> articles = newsResponse.getArticles();
                 articles.stream().forEach(article -> System.out.println(article.toString()));

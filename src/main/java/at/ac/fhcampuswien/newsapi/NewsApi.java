@@ -2,7 +2,7 @@ package at.ac.fhcampuswien.newsapi;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import at.ac.fhcampuswien.newsapi.beans.NewsReponse;
+import at.ac.fhcampuswien.newsapi.beans.NewsResponse;
 import at.ac.fhcampuswien.newsapi.enums.*;
 
 import java.io.*;
@@ -182,14 +182,14 @@ public class NewsApi {
         return sb.toString();
     }
 
-    public NewsReponse getNews() {
-        NewsReponse newsReponse = null;
+    public NewsResponse getNews() {
+        NewsResponse newsReponse = null;
         String jsonResponse = requestData();
         if(jsonResponse != null && !jsonResponse.isEmpty()){
 
             ObjectMapper objectMapper = new ObjectMapper();
             try {
-                newsReponse = objectMapper.readValue(jsonResponse, NewsReponse.class);
+                newsReponse = objectMapper.readValue(jsonResponse, NewsResponse.class);
                 if(!"ok".equals(newsReponse.getStatus())){
                     System.out.println("Error: "+newsReponse.getStatus());
                 }

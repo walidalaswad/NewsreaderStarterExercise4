@@ -9,7 +9,6 @@ import java.io.InputStreamReader;
 
 public class UserInterface 
 {
-	private Menu<Runnable> menu;
 	private Controller ctrl = new Controller();
 
 	public void getDataFromCtrl1(){
@@ -32,8 +31,8 @@ public class UserInterface
 
 
 	public void start() {
-		menu = new Menu<>("User Interface");
-		menu.setTitel("Wählen Sie aus:");
+		Menu<Runnable> menu = new Menu<>("User Interface");
+		menu.setTitle("Wählen Sie aus:");
 		menu.insert("a", "Choice ABC", this::getDataFromCtrl1);
 		menu.insert("b", "Choice DEF", this::getDataFromCtrl2);
 		menu.insert("c", "Choice 3", this::getDataFromCtrl3);

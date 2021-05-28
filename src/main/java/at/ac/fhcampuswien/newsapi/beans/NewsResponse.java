@@ -12,7 +12,7 @@ import java.util.Map;
         "totalResults",
         "articles"
 })
-public class NewsReponse {
+public class NewsResponse {
 
     @JsonProperty("status")
     private String status;
@@ -21,13 +21,13 @@ public class NewsReponse {
     @JsonProperty("articles")
     private List<Article> articles = null;
     @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+    private Map<String, Object> additionalProperties = new HashMap<>();
 
     /**
      * No args constructor for use in serialization
      *
      */
-    public NewsReponse() {
+    public NewsResponse() {
     }
 
     /**
@@ -36,7 +36,7 @@ public class NewsReponse {
      * @param articles
      * @param status
      */
-    public NewsReponse(String status, Integer totalResults, List<Article> articles) {
+    public NewsResponse(String status, Integer totalResults, List<Article> articles) {
         super();
         this.status = status;
         this.totalResults = totalResults;
@@ -53,7 +53,7 @@ public class NewsReponse {
         this.status = status;
     }
 
-    public NewsReponse withStatus(String status) {
+    public NewsResponse withStatus(String status) {
         this.status = status;
         return this;
     }
@@ -68,7 +68,7 @@ public class NewsReponse {
         this.totalResults = totalResults;
     }
 
-    public NewsReponse withTotalResults(Integer totalResults) {
+    public NewsResponse withTotalResults(Integer totalResults) {
         this.totalResults = totalResults;
         return this;
     }
@@ -83,7 +83,7 @@ public class NewsReponse {
         this.articles = articles;
     }
 
-    public NewsReponse withArticles(List<Article> articles) {
+    public NewsResponse withArticles(List<Article> articles) {
         this.articles = articles;
         return this;
     }
@@ -98,7 +98,7 @@ public class NewsReponse {
         this.additionalProperties.put(name, value);
     }
 
-    public NewsReponse withAdditionalProperty(String name, Object value) {
+    public NewsResponse withAdditionalProperty(String name, Object value) {
         this.additionalProperties.put(name, value);
         return this;
     }
