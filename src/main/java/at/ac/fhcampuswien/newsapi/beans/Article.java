@@ -217,4 +217,14 @@ public class Article {
                 ", additionalProperties=" + additionalProperties +
                 '}';
     }
+
+    public String print() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(source != null && source.getName() != null ? source.getName() : "no source provided");
+        sb.append(", ");
+        sb.append(author != null ? author : "no author provided");
+        sb.append(": ");
+        sb.append(title != null ? title : "no title provided");
+        return sb.toString();
+    }
 }

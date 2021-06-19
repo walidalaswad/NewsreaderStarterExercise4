@@ -25,7 +25,7 @@ public class NewsAPIExample {
             NewsResponse newsResponse = newsApi.getNews();
             if(newsResponse != null){
                 List<Article> articles = newsResponse.getArticles();
-                articles.stream().forEach(article -> System.out.println(article.toString()));
+                articles.forEach(article -> System.out.println(article.toString()));
             }
 
         newsApi = new NewsApiBuilder()
@@ -40,7 +40,7 @@ public class NewsAPIExample {
 
         if(newsResponse != null){
             List<Article> articles = newsResponse.getArticles();
-            articles.stream().forEach(article -> System.out.println(article.toString()));
+            articles.forEach(article -> System.out.println(article.toString()));
         }
 
     }

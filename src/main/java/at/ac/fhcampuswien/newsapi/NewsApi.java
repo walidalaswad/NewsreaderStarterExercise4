@@ -1,5 +1,6 @@
 package at.ac.fhcampuswien.newsapi;
 
+import at.ac.fhcampuswien.newsanalyzer.ctrl.NewsAPIException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import at.ac.fhcampuswien.newsapi.beans.NewsResponse;
@@ -9,6 +10,7 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.IllegalFormatException;
 
 public class NewsApi {
 
@@ -112,92 +114,114 @@ public class NewsApi {
         this.endpoint = endpoint;
     }
 
-    protected String requestData() {
+    protected String requestData() throws NewsAPIException {
         String url = buildURL();
         System.out.println("URL: " + url);
         URL obj = null;
+
         try {
             obj = new URL(url);
         } catch (MalformedURLException e) {
-            // TODO improve ErrorHandling
             e.printStackTrace();
+        } catch (Exception e){
+            System.out.println(e.getMessage());
         }
+
         HttpURLConnection con;
         StringBuilder response = new StringBuilder();
         try {
-            con = (HttpURLConnection) obj.openConnection();
-            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-            String inputLine;
-            while ((inputLine = in.readLine()) != null) {
-                response.append(inputLine);
+            if(obj != null){
+                con = (HttpURLConnection) obj.openConnection();
+                BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+                String inputLine;
+                try{
+                    while ((inputLine = in.readLine()) != null) {
+                        response.append(inputLine);
+                    }
+                }catch (IOException e){
+                    System.out.println("Problems while reading input stream.");
+                    System.out.println(e.getMessage());
+                }
+                in.close();
             }
-            in.close();
         } catch (IOException e) {
-            // TODO improve ErrorHandling
-            System.out.println("Error "+e.getMessage());
+            System.out.println("Error " + e.getMessage());
+        } catch (Exception e){
+            System.out.println(e.getMessage());
         }
+
         return response.toString();
     }
 
-    protected String buildURL() {
-        // TODO ErrorHandling
-        String urlbase = String.format(NEWS_API_URL,getEndpoint().getValue(),getQ(),getApiKey());
-        StringBuilder sb = new StringBuilder(urlbase);
+    protected String buildURL() throws NewsAPIException {
+        try{
+            String urlbase = String.format(NEWS_API_URL, getEndpoint().getValue(), getQ(), getApiKey());
 
-        System.out.println(urlbase);
+            StringBuilder sb = new StringBuilder(urlbase);
 
-        if(getFrom() != null){
-            sb.append(DELIMITER).append("from=").append(getFrom());
+            System.out.println(urlbase);
+
+            if(getFrom() != null){
+                sb.append(DELIMITER).append("from=").append(getFrom());
+            }
+            if(getTo() != null){
+                sb.append(DELIMITER).append("to=").append(getTo());
+            }
+            if(getPage() != null){
+                sb.append(DELIMITER).append("page=").append(getPage());
+            }
+            if(getPageSize() != null){
+                sb.append(DELIMITER).append("pageSize=").append(getPageSize());
+            }
+            if(getLanguage() != null){
+                sb.append(DELIMITER).append("language=").append(getLanguage());
+            }
+            if(getSourceCountry() != null){
+                sb.append(DELIMITER).append("country=").append(getSourceCountry());
+            }
+            if(getSourceCategory() != null){
+                sb.append(DELIMITER).append("category=").append(getSourceCategory());
+            }
+            if(getDomains() != null){
+                sb.append(DELIMITER).append("domains=").append(getDomains());
+            }
+            if(getExcludeDomains() != null){
+                sb.append(DELIMITER).append("excludeDomains=").append(getExcludeDomains());
+            }
+            if(getqInTitle() != null){
+                sb.append(DELIMITER).append("qInTitle=").append(getqInTitle());
+            }
+            if(getSortBy() != null){
+                sb.append(DELIMITER).append("sortBy=").append(getSortBy());
+            }
+            return sb.toString();
+        } catch (IllegalFormatException e){
+            throw new NewsAPIException("Cannot build url, because format is illegal.");
         }
-        if(getTo() != null){
-            sb.append(DELIMITER).append("to=").append(getTo());
-        }
-        if(getPage() != null){
-            sb.append(DELIMITER).append("page=").append(getPage());
-        }
-        if(getPageSize() != null){
-            sb.append(DELIMITER).append("pageSize=").append(getPageSize());
-        }
-        if(getLanguage() != null){
-            sb.append(DELIMITER).append("language=").append(getLanguage());
-        }
-        if(getSourceCountry() != null){
-            sb.append(DELIMITER).append("country=").append(getSourceCountry());
-        }
-        if(getSourceCategory() != null){
-            sb.append(DELIMITER).append("category=").append(getSourceCategory());
-        }
-        if(getDomains() != null){
-            sb.append(DELIMITER).append("domains=").append(getDomains());
-        }
-        if(getExcludeDomains() != null){
-            sb.append(DELIMITER).append("excludeDomains=").append(getExcludeDomains());
-        }
-        if(getqInTitle() != null){
-            sb.append(DELIMITER).append("qInTitle=").append(getqInTitle());
-        }
-        if(getSortBy() != null){
-            sb.append(DELIMITER).append("sortBy=").append(getSortBy());
-        }
-        return sb.toString();
     }
 
-    public NewsResponse getNews() {
+    public NewsResponse getNews(){
         NewsResponse newsReponse = null;
-        String jsonResponse = requestData();
-        if(jsonResponse != null && !jsonResponse.isEmpty()){
 
-            ObjectMapper objectMapper = new ObjectMapper();
-            try {
-                newsReponse = objectMapper.readValue(jsonResponse, NewsResponse.class);
-                if(!"ok".equals(newsReponse.getStatus())){
-                    System.out.println("Error: "+newsReponse.getStatus());
+        try {
+            String jsonResponse = requestData();
+
+            if(jsonResponse != null && !jsonResponse.isEmpty()){
+
+                ObjectMapper objectMapper = new ObjectMapper();
+                try {
+                    newsReponse = objectMapper.readValue(jsonResponse, NewsResponse.class);
+                    if(!"ok".equals(newsReponse.getStatus())){
+                        System.out.println("Error: "+newsReponse.getStatus());
+                    }
+                } catch (JsonProcessingException e) {
+                    System.out.println("Error: "+e.getMessage());
                 }
-            } catch (JsonProcessingException e) {
-                System.out.println("Error: "+e.getMessage());
             }
+        } catch (NewsAPIException e){
+            System.out.println(e.getMessage());
         }
-        //TODO improve Errorhandling
+
         return newsReponse;
     }
 }
