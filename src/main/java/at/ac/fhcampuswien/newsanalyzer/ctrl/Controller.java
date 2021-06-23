@@ -38,7 +38,7 @@ public class Controller {
 				.setApiKey(APIKEY)
 				.setQ(this.keyword) //				.setEndPoint(Endpoint.EVERYTHING)
 				.setEndPoint(Endpoint.TOP_HEADLINES)
-				.setFrom("2021-05-20")
+				.setFrom("2021-06-20")
 				.setSourceCountry(this.country)
 				.setSourceCategory(this.category)
 				.setSortBy(this.sortBy)
