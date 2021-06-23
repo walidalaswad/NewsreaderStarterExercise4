@@ -7,15 +7,16 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.ExecutionException;
 
 public abstract class Downloader {
 
     public static final String HTML_EXTENTION = ".html";
     public static final String DIRECTORY_DOWNLOAD = "./download/";
 
-    public abstract int process(List<String> urls);
+    public abstract int process(List<String> urls) throws DownloaderException, ExecutionException, InterruptedException;
 
-    public String saveUrl2File(String urlString) {
+    public String saveUrl2File(String urlString) throws DownloaderException {
         InputStream is = null;
         OutputStream os = null;
         String fileName = "";
@@ -35,12 +36,13 @@ public abstract class Downloader {
                 os.write(b, 0, length);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new DownloaderException("Error in Class Downloader, method saveUrl2File!\n" + e.getMessage());
         } finally {
             try {
                 Objects.requireNonNull(is).close();
                 Objects.requireNonNull(os).close();
             } catch (IOException e) {
+                System.out.println("Error in Class Downloader, method saveUrl2File, finally block!");
                 e.printStackTrace();
             }
         }
